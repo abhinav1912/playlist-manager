@@ -1,7 +1,23 @@
 import Foundation
 
-class PlaylistManager {
-    let fileManager: FileManager = .default
+protocol PlaylistManager {
+    func parse(path: URL) async throws -> Playlist
+}
+
+class PlaylistManagerWrapper: PlaylistManager {
+    let fileManager: FileManager
+    let m3uManager: PlaylistManager
+    let m3u8Manager: PlaylistManager
+
+    init(
+        m3uManager: PlaylistManager,
+        m3u8Manager: PlaylistManager,
+        fileManager: FileManager = .default
+    ) {
+        self.fileManager = fileManager
+        self.m3uManager = m3uManager
+        self.m3u8Manager = m3u8Manager
+    }
 
     func parse(path: URL) async throws -> Playlist {
         try checkPathValidityAndPermissions(for: path)
@@ -10,8 +26,15 @@ class PlaylistManager {
             throw ParsingError.unsupportedPlaylistFormat
         }
 
-        // TODO: Implement parsing
-        throw ParsingError.unsupportedPlaylistFormat
+        let playlist: Playlist
+        switch format {
+        case .m3u:
+            playlist = try await m3uManager.parse(path: path)
+        case .m3u8:
+            playlist = try await m3uManager.parse(path: path)
+        }
+
+        return playlist
     }
 
     enum ParsingError: Error {
@@ -22,6 +45,7 @@ class PlaylistManager {
 
     enum SupportedFormats: String, CaseIterable {
         case m3u
+        case m3u8
     }
 
     private func checkPathValidityAndPermissions(for path: URL) throws {
