@@ -31,7 +31,7 @@ class PlaylistManagerWrapper: PlaylistManager {
         case .m3u:
             playlist = try await m3uManager.parse(path: path)
         case .m3u8:
-            playlist = try await m3uManager.parse(path: path)
+            playlist = try await m3u8Manager.parse(path: path)
         }
 
         return playlist
@@ -49,11 +49,11 @@ class PlaylistManagerWrapper: PlaylistManager {
     }
 
     private func checkPathValidityAndPermissions(for path: URL) throws {
-        guard fileManager.fileExists(atPath: path.absoluteString) else {
+        guard fileManager.fileExists(atPath: path.path) else {
             throw ParsingError.invalidPath
         }
 
-        guard fileManager.isReadableFile(atPath: path.absoluteString) else {
+        guard fileManager.isReadableFile(atPath: path.path) else {
             throw ParsingError.insufficientPermissions
         }
     }

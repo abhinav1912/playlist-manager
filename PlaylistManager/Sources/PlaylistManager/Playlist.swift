@@ -9,7 +9,7 @@ import Foundation
 
 /// basic interface for playlist
 /// all subtypes (M3U, M3U8, etc) will conform to this
-protocol Playlist {
+protocol Playlist: Sendable {
     var path: URL { get }
     var mediaItems: [Media] { get }
 }
