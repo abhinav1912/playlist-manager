@@ -1,0 +1,15 @@
+#EXTM3U
+#EXTINF:180,Artist One - Song One
+../Files/sample.mp3
+#EXTINF:240,Artist Two - Song Two
+../Files/sample2.mp3
+#EXTINF:200,Artist Three - Song Three
+../Files/sample.m4a
+#EXTINF:195,Artist One - Song Four
+../Files/sample.ogg
+#EXTINF:195,Artist One - Song Five
+../Files/sample.wav
+#EXTINF:195,Artist One - Song Six
+../Files/e2a2cafc-bc54-498b-b5a8-3059f94dbdee.aac
+#EXTINF:195,Artist One - Song Seven
+../Files/music-sample-44100hz-16bit.flac

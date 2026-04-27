@@ -271,6 +271,60 @@ struct PlaylistManagerTests {
         #expect(PlaylistManagerWrapper.SupportedFormats(rawValue: "m3u8") == .m3u8)
         #expect(PlaylistManagerWrapper.SupportedFormats(rawValue: "pls") == nil)
     }
+
+    @Test("Parse real M3U sample playlist with relative paths")
+    func parseRealM3USamplePlaylist() async throws {
+        // Given
+        let samplePlaylistPath = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .appendingPathComponent("Samples")
+            .appendingPathComponent("Playlists")
+            .appendingPathComponent("Sample.m3u")
+
+        let m3uManager = M3UPlaylistManager()
+
+        // When
+        let playlist = try await m3uManager.parse(path: samplePlaylistPath)
+
+        // Then
+        #expect(playlist.path == samplePlaylistPath)
+        #expect(playlist.mediaItems.count == 4)
+
+        // Verify first media item
+        let firstItem = playlist.mediaItems[0]
+        #expect(firstItem.title == "Song One")
+        #expect(firstItem.artist == "Artist One")
+        #expect(firstItem.path.lastPathComponent == "song1.mp3")
+
+        // Verify second media item
+        let secondItem = playlist.mediaItems[1]
+        #expect(secondItem.title == "Song Two")
+        #expect(secondItem.artist == "Artist Two")
+        #expect(secondItem.path.lastPathComponent == "song2.mp3")
+
+        // Verify third media item
+        let thirdItem = playlist.mediaItems[2]
+        #expect(thirdItem.title == "Song Three")
+        #expect(thirdItem.artist == "Artist Three")
+        #expect(thirdItem.path.lastPathComponent == "song3.mp3")
+
+        // Verify fourth media item
+        let fourthItem = playlist.mediaItems[3]
+        #expect(fourthItem.title == "Song Four")
+        #expect(fourthItem.artist == "Artist One")
+        #expect(fourthItem.path.lastPathComponent == "song4.mp3")
+
+        // Verify that paths are resolved correctly (relative to playlist)
+        let expectedFilesDirectory = samplePlaylistPath
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .appendingPathComponent("Files")
+
+        for item in playlist.mediaItems {
+            #expect(item.path.deletingLastPathComponent() == expectedFilesDirectory)
+        }
+    }
 }
 
 // MARK: - Test Tags
