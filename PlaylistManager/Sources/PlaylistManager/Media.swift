@@ -8,8 +8,11 @@
 import Foundation
 
 /// media items contained within the playlist
-struct Media {
-    var title: String
-    var artist: String
-    var path: URL
+public struct Media: Sendable {
+    let title: String
+    let artist: String
+    let path: URL
 }
+
+// MARK: Protocol conformances
+extension Media: Hashable {}

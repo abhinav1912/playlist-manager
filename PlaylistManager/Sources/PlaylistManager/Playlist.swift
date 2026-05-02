@@ -9,7 +9,33 @@ import Foundation
 
 /// basic interface for playlist
 /// all subtypes (M3U, M3U8, etc) will conform to this
-protocol Playlist: Sendable {
-    var path: URL { get }
-    var mediaItems: [Media] { get }
+public struct Playlist: Sendable {
+    let path: URL
+    let mediaItems: [Media]
+    let title: String
+    let customDescription: String?
+
+    // TODO: Remove the default title, and add title parsing from file path
+    init(path: URL, mediaItems: [Media], title: String = "Untitled", customDescription: String? = nil) {
+        self.path = path
+        self.mediaItems = mediaItems
+        self.title = title
+        self.customDescription = customDescription
+    }
 }
+
+// MARK: Protocol conformances
+
+extension Playlist: Identifiable {
+    public var id: String {
+        path.absoluteString
+    }
+}
+
+extension Playlist: Equatable {
+    public static func == (lhs: Playlist, rhs: Playlist) -> Bool {
+        lhs.id == rhs.id
+    }
+}
+
+extension Playlist: Hashable {}

@@ -7,7 +7,7 @@
 
 import Foundation
 
-class M3U8PlaylistManager: PlaylistManager {
+actor M3U8PlaylistManager: PlaylistManager {
     func parse(path: URL) async throws -> Playlist {
         fatalError("Not implemented")
     }

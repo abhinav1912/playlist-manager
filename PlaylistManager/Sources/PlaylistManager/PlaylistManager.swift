@@ -1,13 +1,15 @@
 import Foundation
 
-protocol PlaylistManager {
+public protocol PlaylistManager: Sendable {
     func parse(path: URL) async throws -> Playlist
 }
 
-class PlaylistManagerWrapper: PlaylistManager {
+public actor PlaylistManagerService: PlaylistManager {
     let fileManager: FileManager
     let m3uManager: PlaylistManager
     let m3u8Manager: PlaylistManager
+
+    public static let shared: PlaylistManager = PlaylistManagerService(m3uManager: M3UPlaylistManager(), m3u8Manager: M3U8PlaylistManager())
 
     init(
         m3uManager: PlaylistManager,
@@ -19,7 +21,7 @@ class PlaylistManagerWrapper: PlaylistManager {
         self.m3u8Manager = m3u8Manager
     }
 
-    func parse(path: URL) async throws -> Playlist {
+    public func parse(path: URL) async throws -> Playlist {
         try checkPathValidityAndPermissions(for: path)
 
         guard let format = SupportedFormats(rawValue: path.pathExtension) else {

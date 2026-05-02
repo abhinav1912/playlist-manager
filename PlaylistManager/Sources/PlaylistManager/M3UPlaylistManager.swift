@@ -7,7 +7,7 @@
 
 import Foundation
 
-class M3UPlaylistManager: PlaylistManager {
+actor M3UPlaylistManager: PlaylistManager {
     
     enum M3UError: Error {
         case invalidFormat
@@ -65,7 +65,7 @@ class M3UPlaylistManager: PlaylistManager {
             }
         }
         
-        return M3UPlaylist(path: path, mediaItems: mediaItems)
+        return Playlist(path: path, mediaItems: mediaItems)
     }
     
     /// Placeholder method for reading metadata from media files
@@ -114,11 +114,4 @@ class M3UPlaylistManager: PlaylistManager {
         let playlistDirectory = playlistURL.deletingLastPathComponent()
         return playlistDirectory.appendingPathComponent(pathString)
     }
-}
-
-// MARK: - M3U Playlist Implementation
-
-struct M3UPlaylist: Playlist {
-    let path: URL
-    let mediaItems: [Media]
 }
