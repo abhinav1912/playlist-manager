@@ -8,7 +8,13 @@
 import Foundation
 
 actor M3UPlaylistManager: PlaylistManager {
-    
+
+    private let metadataService: MetadataService
+
+    init(metadataService: MetadataService = MetadataServiceImpl()) {
+        self.metadataService = metadataService
+    }
+
     enum M3UError: Error {
         case invalidFormat
         case invalidHeader
@@ -57,7 +63,8 @@ actor M3UPlaylistManager: PlaylistManager {
                 let media = Media(
                     title: title ?? mediaPath.lastPathComponent,
                     artist: artist ?? "Unknown Artist",
-                    path: mediaPath
+                    path: mediaPath,
+                    metadata: AudioMetadata()
                 )
                 
                 mediaItems.append(media)
@@ -70,8 +77,8 @@ actor M3UPlaylistManager: PlaylistManager {
     
     /// Placeholder method for reading metadata from media files
     /// Returns nil for now, will be implemented later
-    private func readMetadata(for path: URL) -> Media? {
-        return nil
+    private func readMetadata(for path: URL) -> AudioMetadata? {
+        metadataService.readMetadata(for: path)
     }
     
     /// Parse EXTINF line to extract title and artist
