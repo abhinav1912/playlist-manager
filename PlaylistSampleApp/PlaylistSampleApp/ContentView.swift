@@ -126,7 +126,7 @@ struct ContentView: View {
 
 struct PlaylistDetailView: View {
     let playlist: Playlist
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             // Header

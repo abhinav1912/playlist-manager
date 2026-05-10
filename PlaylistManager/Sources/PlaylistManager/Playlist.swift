@@ -15,12 +15,29 @@ public struct Playlist: Sendable {
     public let title: String
     public let customDescription: String?
 
-    // TODO: Remove the default title, and add title parsing from file path
-    init(path: URL, mediaItems: [Media], title: String = "Untitled", customDescription: String? = nil) {
+    init(path: URL, mediaItems: [Media], customDescription: String? = nil) {
         self.path = path
         self.mediaItems = mediaItems
-        self.title = title
         self.customDescription = customDescription
+        self.title = Self.generateTitle(from: path)
+    }
+    
+    /// Generates a human-readable title from a file path
+    /// Removes the file extension and formats the filename
+    private static func generateTitle(from url: URL) -> String {
+        let filename = url.deletingPathExtension().lastPathComponent
+        
+        // Replace common separators with spaces
+        var title = filename
+            .replacingOccurrences(of: "_", with: " ")
+            .replacingOccurrences(of: "-", with: " ")
+            .replacingOccurrences(of: ".", with: " ")
+        
+        // Trim extra whitespace
+        title = title.trimmingCharacters(in: .whitespaces)
+        
+        // If the title is empty after processing, return a default
+        return title.isEmpty ? "Untitled" : title
     }
 }
 
