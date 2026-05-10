@@ -8,10 +8,10 @@ import Foundation
 
 public struct AudioMetadata: Sendable, Hashable {
     /// figure out which fields to make public
+    public var duration: TimeInterval = .zero
     var title: String?
     var album: String?
     var artist: [String] = []
-    var duration: TimeInterval = .zero
     var genre: String?
     var year: Int?
     var trackNumber: Int?

@@ -9,10 +9,10 @@ import Foundation
 
 /// media items contained within the playlist
 public struct Media: Sendable {
-    let title: String
-    let artist: String
+    public let title: String
+    public let artist: String
+    public let metadata: AudioMetadata
     let path: URL
-    let metadata: AudioMetadata
 }
 
 // MARK: Protocol conformances

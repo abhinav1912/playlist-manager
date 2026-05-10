@@ -11,9 +11,9 @@ import Foundation
 /// all subtypes (M3U, M3U8, etc) will conform to this
 public struct Playlist: Sendable {
     let path: URL
-    let mediaItems: [Media]
-    let title: String
-    let customDescription: String?
+    public let mediaItems: [Media]
+    public let title: String
+    public let customDescription: String?
 
     // TODO: Remove the default title, and add title parsing from file path
     init(path: URL, mediaItems: [Media], title: String = "Untitled", customDescription: String? = nil) {

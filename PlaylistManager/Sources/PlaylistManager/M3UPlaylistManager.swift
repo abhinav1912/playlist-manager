@@ -58,13 +58,13 @@ actor M3UPlaylistManager: PlaylistManager {
                 let (title, artist) = parseExtInf(currentExtInf)
                 
                 // Read metadata (placeholder for now)
-                _ = readMetadata(for: mediaPath)
-                
+                _ = await readMetadata(for: mediaPath)
+
                 let media = Media(
                     title: title ?? mediaPath.lastPathComponent,
                     artist: artist ?? "Unknown Artist",
-                    path: mediaPath,
-                    metadata: AudioMetadata()
+                    metadata: AudioMetadata(),
+                    path: mediaPath
                 )
                 
                 mediaItems.append(media)
@@ -77,8 +77,8 @@ actor M3UPlaylistManager: PlaylistManager {
     
     /// Placeholder method for reading metadata from media files
     /// Returns nil for now, will be implemented later
-    private func readMetadata(for path: URL) -> AudioMetadata? {
-        metadataService.readMetadata(for: path)
+    private func readMetadata(for path: URL) async -> AudioMetadata? {
+        await metadataService.readMetadata(for: path)
     }
     
     /// Parse EXTINF line to extract title and artist
